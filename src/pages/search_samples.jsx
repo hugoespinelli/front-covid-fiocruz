@@ -10,6 +10,7 @@ import Container from "@material-ui/core/Container";
 import FiocruzLogo from "../logo-fiocruz.png";
 import Avatar from "@material-ui/core/Avatar";
 import MaterialTable from "material-table";
+import { get_samples } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,27 +79,28 @@ export default function SearchSamples() {
             },
           }}
           columns={[
-            { title: "ID da amostra", field: "name" },
-            { title: "Nome do Arquivo", field: "surname" },
-            { title: "Tipo", field: "birthYear" },
-            { title: "Comorbidade", field: "birthYear" },
-            { title: "Tecido", field: "birthYear" },
-            { title: "Data criação", field: "birthYear" },
+            { title: "ID da amostra", field: "numero" },
+            { title: "gravidade", field: "gravidade" },
+            { title: "doenca", field: "doenca" },
+            { title: "Tecido", field: "tecido" },
+            { title: "Está Infectado", field: "estaInfectado" },
           ]}
-          data={[
-            {
-              name: "Mehmet",
-              surname: "Baran",
-              birthYear: 1987,
-              birthCity: 63,
-            },
-          ]}
+          data={query =>
+            new Promise(async (resolve, reject) => {
+              const { data } = await get_samples(query);
+              resolve({
+                  data: data, // your data array
+                  page: 0, // current page number
+                  totalCount: data.length, // total row number
+              });
+            })
+        }
           actions={[
             {
               icon: "download",
               iconProps: { color: "primary" },
               tooltip: "Baixar amostra",
-              onClick: (event, rowData) => console.log("wee"),
+              onClick: (event, rowData) => alert(`Baixar amostra ${rowData.numero}`),
             },
             (rowData) => ({
               icon: "compare_arrows",
