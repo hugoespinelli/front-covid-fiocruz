@@ -11,16 +11,7 @@ const instance = axios.create({
 export async function get_samples(search) {
   try {
     const response = await instance.get("/amostras");
-    // const response = [
-    //   {
-    //     numero: 1111,
-    //     estaInfectado: 1,
-    //     doenca: "covid",
-    //     gravidade: "leve",
-    //     tecido: "pulmão",
-    //   },
-    // ];
-    return response;
+    return response.data;
   } catch (error) {
     console.error(error);
   }

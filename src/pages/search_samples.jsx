@@ -3,13 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import FiocruzLogo from "../logo-fiocruz.png";
 import Avatar from "@material-ui/core/Avatar";
 import MaterialTable from "material-table";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import { get_samples } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchSamples() {
   const classes = useStyles();
+
+  const submit = (rowData) => {
+    confirmAlert({
+      title: 'Confirmação de transfêrencia de arquivos',
+      message: `Você tem certeza que deseja transferir o arquivo ${rowData.numero} do SDummont para a fiocruz?`,
+      buttons: [
+        {
+          label: 'Sim',
+          onClick: () => alert('Click Yes')
+        },
+        {
+          label: 'Não',
+        }
+      ]
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -80,18 +97,18 @@ export default function SearchSamples() {
           }}
           columns={[
             { title: "ID da amostra", field: "numero" },
-            { title: "gravidade", field: "gravidade" },
-            { title: "doenca", field: "doenca" },
+            { title: "Gravidade", field: "gravidade" },
+            { title: "Doenca", field: "doenca" },
             { title: "Tecido", field: "tecido" },
-            { title: "Está Infectado", field: "estaInfectado" },
+            { title: "Está Infectado", field: "estaInfectado", render: rowData => rowData ? "Sim": "Não"},
           ]}
           data={query =>
             new Promise(async (resolve, reject) => {
-              const { data } = await get_samples(query);
+              const samples = await get_samples(query);
               resolve({
-                  data: data, // your data array
+                  data: samples, // your samples array
                   page: 0, // current page number
-                  totalCount: data.length, // total row number
+                  totalCount: samples.length, // total row number
               });
             })
         }
@@ -106,7 +123,7 @@ export default function SearchSamples() {
               icon: "compare_arrows",
               iconProps: { color: "primary" },
               tooltip: "Transferir para o servidor",
-              onClick: (event, rowData) => console.log("wee"),
+              onClick: (event, rowData) => submit(rowData),
             }),
           ]}
           options={{
