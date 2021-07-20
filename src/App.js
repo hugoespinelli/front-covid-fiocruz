@@ -1,10 +1,14 @@
 import './App.css';
+import { SnackbarProvider } from 'notistack';
+
 import SearchSamples from './pages/search_samples';
 
 function App() {
   return (
     <div className="App">
-      <SearchSamples />
+      <SnackbarProvider maxSnack={3}>
+        <SearchSamples />
+      </SnackbarProvider>
     </div>
   );
 }

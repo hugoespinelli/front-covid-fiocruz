@@ -25,3 +25,12 @@ export async function download_sample() {
     console.error(error);
   }
 }
+
+export async function transfer_files() {
+  try {
+    const response = await instance.post("/amostras");
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+}

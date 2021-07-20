@@ -1,22 +1,27 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SubMenu,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
+} from "react-pro-sidebar";
+import "react-pro-sidebar/dist/css/styles.css";
 import Container from "@material-ui/core/Container";
-import FiocruzLogo from "../logo-fiocruz.png";
-import Avatar from "@material-ui/core/Avatar";
 import MaterialTable from "material-table";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert";
+import { useSnackbar } from "notistack";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
-import { get_samples } from "../utils";
+import { get_samples, transfer_files } from "../utils";
+import Navbar from "../components/navbar";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -28,110 +33,120 @@ const useStyles = makeStyles((theme) => ({
   },
   containerSpace: {
     paddingTop: theme.spacing(8),
+    paddingLeft: theme.spacing(6),
     paddingBottom: theme.spacing(3),
   },
 }));
 
 export default function SearchSamples() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const transferFiles = async () => {
+    try {
+      const response = await transfer_files();
+      enqueueSnackbar("Transferência efetuada com sucesso!", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Oops! Deu algo errado durante a transferência.", {
+        variant: "error",
+      });
+    }
+  };
 
   const submit = (rowData) => {
     confirmAlert({
-      title: 'Confirmação de transfêrencia de arquivos',
+      title: "Confirmação de transfêrencia de arquivos",
       message: `Você tem certeza que deseja transferir o arquivo ${rowData.numero} do SDummont para a fiocruz?`,
       buttons: [
         {
-          label: 'Sim',
-          onClick: () => alert('Click Yes')
+          label: "Sim",
+          onClick: () => transferFiles(),
         },
         {
-          label: 'Não',
-        }
-      ]
+          label: "Não",
+        },
+      ],
     });
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar variant="regular">
-          <Grid container>
-            <Grid container item md={4} justifyContent="left">
-              <Avatar
-                alt="logo fiocruz"
-                variant="rounded"
-                src={FiocruzLogo}
-                className={classes.large}
-              />
-            </Grid>
-
-            <Grid
-              container
-              item
-              md={4}
-              justifyContent="center"
-              alignContent="center"
-            >
-              <Typography variant="h4" color="inherit">
-                Portal Fiocruz
-              </Typography>
-            </Grid>
-
-            <Grid item md={4}></Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-
-      <Container className={classes.containerSpace}>
-        <MaterialTable
-          localization={{
-            toolbar: {
-              searchPlaceholder: "Procurar amostra",
-            },
-            header: {
-              actions: "Ações",
-            },
-            body: {
-              emptyDataSourceMessage: "Sem amostras disponíveis",
-            },
-          }}
-          columns={[
-            { title: "ID da amostra", field: "numero" },
-            { title: "Gravidade", field: "gravidade" },
-            { title: "Doenca", field: "doenca" },
-            { title: "Tecido", field: "tecido" },
-            { title: "Está Infectado", field: "estaInfectado", render: rowData => rowData ? "Sim": "Não"},
-          ]}
-          data={query =>
-            new Promise(async (resolve, reject) => {
-              const samples = await get_samples(query);
-              resolve({
+    <Grid container>
+      <Grid item sm={2}>
+        <ProSidebar width={250}>
+          <SidebarHeader>
+            <Navbar />
+          </SidebarHeader>
+          <SidebarContent>
+            <Menu iconShape="square">
+              <MenuItem><Typography>Amostras</Typography> </MenuItem>
+            </Menu>
+          </SidebarContent>
+          <SidebarFooter>
+            <Typography variation='caption'>
+              Feito pelos alunos UERJ
+            </Typography>
+          </SidebarFooter>
+        </ProSidebar>
+      </Grid>
+      <Grid item sm={10}>
+        <Container className={classes.containerSpace}>
+          <MaterialTable
+            localization={{
+              toolbar: {
+                searchPlaceholder: "Procurar amostra",
+              },
+              header: {
+                actions: "Ações",
+              },
+              body: {
+                emptyDataSourceMessage: "Sem amostras disponíveis",
+              },
+            }}
+            columns={[
+              { title: "ID da amostra", field: "numero" },
+              { title: "Gravidade", field: "gravidade" },
+              { title: "Doenca", field: "doenca" },
+              { title: "Tecido", field: "tecido" },
+              {
+                title: "Está Infectado",
+                field: "estaInfectado",
+                render: (rowData) => (rowData ? "Sim" : "Não"),
+              },
+            ]}
+            data={(query) =>
+              new Promise(async (resolve, reject) => {
+                const samples = await get_samples(query);
+                resolve({
                   data: samples, // your samples array
                   page: 0, // current page number
                   totalCount: samples.length, // total row number
-              });
-            })
-        }
-          actions={[
-            {
-              icon: "download",
-              iconProps: { color: "primary" },
-              tooltip: "Baixar amostra",
-              onClick: (event, rowData) => alert(`Baixar amostra ${rowData.numero}`),
-            },
-            (rowData) => ({
-              icon: "compare_arrows",
-              iconProps: { color: "primary" },
-              tooltip: "Transferir para o servidor",
-              onClick: (event, rowData) => submit(rowData),
-            }),
-          ]}
-          options={{
-            actionsColumnIndex: -1,
-          }}
-          title="Dados processados no LNCC"
-        />
-      </Container>
-    </div>
+                });
+              })
+            }
+            actions={[
+              {
+                icon: "download",
+                iconProps: { color: "primary" },
+                tooltip: "Baixar amostra",
+                onClick: (event, rowData) =>
+                  alert(`Baixar amostra ${rowData.numero}`),
+              },
+              (rowData) => ({
+                icon: "compare_arrows",
+                iconProps: { color: "primary" },
+                tooltip: "Transferir para o servidor",
+                onClick: (event, rowData) => submit(rowData),
+              }),
+            ]}
+            options={{
+              actionsColumnIndex: -1,
+            }}
+            title="Dados processados no LNCC"
+          />
+        </Container>
+      </Grid>
+    </Grid>
   );
 }
