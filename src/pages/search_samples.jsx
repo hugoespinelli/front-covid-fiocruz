@@ -1,17 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import {
-  ProSidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
-} from "react-pro-sidebar";
-import "react-pro-sidebar/dist/css/styles.css";
 import Container from "@material-ui/core/Container";
 import MaterialTable from "material-table";
 import { confirmAlert } from "react-confirm-alert";
@@ -19,7 +8,7 @@ import { useSnackbar } from "notistack";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { get_samples, transfer_files } from "../utils";
-import Navbar from "../components/navbar";
+import Sidebar from "../components/sidebar";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -35,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingLeft: theme.spacing(6),
     paddingBottom: theme.spacing(3),
+  },
+  root: {
+    position: "fixed",
+    width: "100%",
+    height: "100%",
+    overflow: "auto",
   },
 }));
 
@@ -72,25 +67,11 @@ export default function SearchSamples() {
   };
 
   return (
-    <Grid container>
-      <Grid item sm={2}>
-        <ProSidebar width={250}>
-          <SidebarHeader>
-            <Navbar />
-          </SidebarHeader>
-          <SidebarContent>
-            <Menu iconShape="square">
-              <MenuItem><Typography>Amostras</Typography> </MenuItem>
-            </Menu>
-          </SidebarContent>
-          <SidebarFooter>
-            <Typography variation='caption'>
-              Feito pelos alunos UERJ
-            </Typography>
-          </SidebarFooter>
-        </ProSidebar>
+    <Grid container className={classes.root}>
+      <Grid item sm={2} className={classes.sidebar}>
+        <Sidebar/>
       </Grid>
-      <Grid item sm={10}>
+      <Grid item sm={10} className={classes.content}>
         <Container className={classes.containerSpace}>
           <MaterialTable
             localization={{
