@@ -1,6 +1,8 @@
 import React from "react";
-import EcoOutlinedIcon from "@material-ui/icons/EcoOutlined";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faVial } from '@fortawesome/free-solid-svg-icons'
 import { makeStyles } from "@material-ui/core/styles";
+import grey from '@material-ui/core/colors/grey'
 import Typography from "@material-ui/core/Typography";
 import {
   ProSidebar,
@@ -10,12 +12,17 @@ import {
   SidebarFooter,
   SidebarContent,
 } from "react-pro-sidebar";
+import { Link } from 'react-router-dom';
 import "react-pro-sidebar/dist/css/styles.css";
+
 import Navbar from "./navbar";
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
     position: "fixed"
+  },
+  footer: {
+    color: grey[700]
   }
 }));
 
@@ -29,7 +36,8 @@ export default function Sidebar() {
       </SidebarHeader>
       <SidebarContent>
         <Menu iconShape="round">
-          <MenuItem icon={<EcoOutlinedIcon />}>
+          <MenuItem icon={<FontAwesomeIcon icon={faVial} />}>
+            <Link to="/" />
             <Typography>Amostras</Typography>
           </MenuItem>
         </Menu>
@@ -37,7 +45,7 @@ export default function Sidebar() {
       <SidebarFooter>
         <Menu iconShape="square">
           <MenuItem>
-            <Typography variation="overline">
+            <Typography variant="caption" className={classes.footer}>
               Feito pelos alunos UERJ
             </Typography>
           </MenuItem>
