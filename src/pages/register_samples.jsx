@@ -7,8 +7,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSnackbar } from "notistack";
 
 import InputSamples from "../components/input_samples";
@@ -31,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegisterSamples({ toggleBackdrop })  {
+const RegisterSamples = (props) => {
+  const setBackdropOpen = props.setBackdropOpen;
   const classes = useStyles();
   const [state, setState] = React.useState({
     severity: "",
@@ -41,6 +40,8 @@ function RegisterSamples({ toggleBackdrop })  {
     isInfected: false,
   });
   const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => setBackdropOpen(false), [setBackdropOpen]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -93,11 +94,20 @@ function RegisterSamples({ toggleBackdrop })  {
 
   const onclick = async (event) => {
     if (isDataValid(state)) {
+      setBackdropOpen(true);
       const dataMapped = mapperData(state);
-      const response = await register_sample(dataMapped);
-      enqueueSnackbar("A amostra foi salva com sucesso!", {
-        variant: "success",
-      });
+      try {
+        await register_sample(dataMapped);
+        enqueueSnackbar("A amostra foi salva com sucesso!", {
+          variant: "success",
+        });
+      } catch (error) {
+        enqueueSnackbar("Oops! Deu algo errado ao salvar a amostra.", {
+          variant: "error",
+        });
+      } finally {
+        setBackdropOpen(false);
+      }
     }
   };
 
@@ -163,6 +173,6 @@ function RegisterSamples({ toggleBackdrop })  {
       </Grid>
     </Paper>
   );
-}
+};
 
 export default WithBackdrop(RegisterSamples);

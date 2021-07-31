@@ -15,7 +15,7 @@ export default function SearchSamples() {
 
   const transferFiles = async () => {
     try {
-      const response = await transfer_files();
+      await transfer_files();
       enqueueSnackbar("Transferência efetuada com sucesso!", {
         variant: "success",
       });

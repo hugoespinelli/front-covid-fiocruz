@@ -9,37 +9,21 @@ const instance = axios.create({
 });
 
 export async function get_samples(search) {
-  try {
-    const response = await instance.get("/amostras");
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await instance.get("/amostras");
+  return response.data;
 }
 
 export async function download_sample() {
-  try {
-    const response = await instance.get("/download");
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await instance.get("/download");
+  return response;
 }
 
 export async function transfer_files() {
-  try {
-    const response = await instance.post("/amostras");
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await instance.post("/amostras");
+  return response;
 }
 
 export async function register_sample(sample) {
-  try {
-    const response = await instance.post("/amostras", sample);
-    return response;
-  } catch(error) {
-    console.error(error);
-  }
+  const response = await instance.post("/amostras", sample);
+  return response;
 }
