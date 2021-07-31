@@ -1,12 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import NativeSelect from "@material-ui/core/NativeSelect";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 import InputSamples from "../components/input_samples";
 
@@ -14,12 +14,15 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
-  formControl: {
+  textField: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: "400px",
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  switch: {
+    margin: theme.spacing(0),
+  },
+  btn: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -27,7 +30,10 @@ export default function RegisterSamples() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     severity: "",
-    name: "hai",
+    disease: "",
+    tissue: "",
+    sampleId: "",
+    isInfected: false,
   });
 
   const handleChange = (event) => {
@@ -38,37 +44,64 @@ export default function RegisterSamples() {
     });
   };
 
+  const handleChangeSwitch = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
   return (
     <Paper className={classes.paper}>
       <Typography variant="h6" gutterBottom="true" align="left">
         Registrar nova amostra
       </Typography>
-      <Grid container alignItems="flex-start">
+      <Grid container direction="column" alignItems="flex-start">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={state.isInfected}
+              onChange={handleChangeSwitch}
+              name="isInfected"
+              color="primary"
+            />
+          }
+          label="Está infectado?"
+          className={classes.switch}
+        />
+        <TextField
+          id="sampleId"
+          name="sampleId"
+          label="Identificador amostra"
+          value={state.sampleId}
+          onChange={handleChange}
+          className={classes.textField}
+        />
 
-        <Grid item>
-        <InputSamples 
+        <InputSamples
           label="Gravidade"
+          name="severity"
           value={state.severity}
           onChange={handleChange}
-          options={[{key: "leve", value: "leve"}]}
-          help="A gravidade que o paciente se encontra"
+          options={[{ key: "leve", value: "leve" }]}
+          help="A gravidade do paciente"
         />
-        <InputSamples 
+        <InputSamples
           label="Doença"
           value={state.disease}
+          name="disease"
           onChange={handleChange}
-          options={[{key: "leve", value: "leve"}]}
+          options={[{ key: "diabetes", value: "diabetes" }]}
           help="Comorbidade do paciente"
         />
-        <InputSamples 
+        <InputSamples
           label="Tecido"
+          name="tissue"
           value={state.tissue}
           onChange={handleChange}
-          options={[{key: "leve", value: "leve"}]}
+          options={[{ key: "pulmao", value: "pulmao" }]}
           help="Tecido da amostra"
         />
-        </Grid>
-
+        <Button variant="contained" color="primary" className={classes.btn}>
+          Registrar
+        </Button>
       </Grid>
     </Paper>
   );

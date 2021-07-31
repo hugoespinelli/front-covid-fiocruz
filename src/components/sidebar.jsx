@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVial } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faVial } from '@fortawesome/free-solid-svg-icons'
 import { makeStyles } from "@material-ui/core/styles";
 import grey from '@material-ui/core/colors/grey'
 import Typography from "@material-ui/core/Typography";
@@ -37,7 +37,7 @@ export default function Sidebar() {
       </SidebarHeader>
       <SidebarContent>
         <Menu iconShape="round">
-          <MenuItem>
+          <MenuItem icon={<FontAwesomeIcon icon={faHome} />}>
           Página Inicial
           <Link to="/" />
           </MenuItem>

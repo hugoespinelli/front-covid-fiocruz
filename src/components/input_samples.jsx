@@ -9,7 +9,7 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 400,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -26,7 +26,7 @@ export default function InputSamples(props) {
         value={props.value}
         onChange={props.onChange}
         inputProps={{
-          name: "label",
+          name: props.name,
           id: "label-native-helper",
         }}
       >
@@ -41,6 +41,7 @@ export default function InputSamples(props) {
 }
 
 InputSamples.propTypes = {
+  name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   help: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
