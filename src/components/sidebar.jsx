@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import {
   ProSidebar,
   Menu,
+  SubMenu,
   MenuItem,
   SidebarHeader,
   SidebarFooter,
@@ -36,10 +37,28 @@ export default function Sidebar() {
       </SidebarHeader>
       <SidebarContent>
         <Menu iconShape="round">
-          <MenuItem icon={<FontAwesomeIcon icon={faVial} />}>
-            <Link to="/" />
-            <Typography>Amostras</Typography>
+          <MenuItem>
+          Página Inicial
+          <Link to="/" />
           </MenuItem>
+          <SubMenu title="Amostras" icon={<FontAwesomeIcon icon={faVial} />}>
+            
+            <MenuItem>
+              <Link to="/lncc" />
+              <Typography variant="caption">Arquivos LNCC</Typography>
+            </MenuItem>
+
+            <MenuItem>
+              <Link to="/servidor" />
+              <Typography variant="caption">Arquivos Servidor Fiocruz</Typography>
+            </MenuItem>
+
+            <MenuItem>
+              <Link to="/cadastrar" />
+              <Typography variant="caption">Cadastrar Amostra</Typography>
+            </MenuItem>
+            
+          </SubMenu>
         </Menu>
       </SidebarContent>
       <SidebarFooter>
