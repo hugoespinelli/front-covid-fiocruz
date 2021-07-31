@@ -7,8 +7,13 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSnackbar } from "notistack";
 
 import InputSamples from "../components/input_samples";
+import WithBackdrop from "../components/backdrop_hoc";
+import { register_sample } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RegisterSamples() {
+function RegisterSamples({ toggleBackdrop })  {
   const classes = useStyles();
   const [state, setState] = React.useState({
     severity: "",
@@ -35,6 +40,7 @@ export default function RegisterSamples() {
     sampleId: "",
     isInfected: false,
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -46,6 +52,53 @@ export default function RegisterSamples() {
 
   const handleChangeSwitch = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
+  const mapperData = (data) => {
+    return {
+      gravidade: data.severity,
+      doenca: data.disease,
+      tecido: data.tissue,
+      idAmostra: data.sampleId,
+      estaInfectado: data.isInfected,
+    };
+  };
+
+  const translateData = (data) => {
+    const translation = {
+      sampleId: "id da amostra",
+      severity: "gravidade",
+      disease: "doença",
+      tissue: "tecido",
+    };
+    return translation[data];
+  };
+
+  const isEmpty = (data) => {
+    return data === "";
+  };
+
+  const isDataValid = (data) => {
+    const fieldsToBeChecked = ["sampleId", "severity", "disease", "tissue"];
+    return fieldsToBeChecked.every((field) => {
+      if (isEmpty(state[field])) {
+        enqueueSnackbar(`O campo ${translateData(field)} se encontra vazio.`, {
+          variant: "error",
+        });
+        return false;
+      }
+      return true;
+    });
+  };
+
+  const onclick = async (event) => {
+    if (isDataValid(state)) {
+      const dataMapped = mapperData(state);
+      const response = await register_sample(dataMapped);
+      enqueueSnackbar("A amostra foi salva com sucesso!", {
+        variant: "success",
+      });
+    }
   };
 
   return (
@@ -99,10 +152,17 @@ export default function RegisterSamples() {
           options={[{ key: "pulmao", value: "pulmao" }]}
           help="Tecido da amostra"
         />
-        <Button variant="contained" color="primary" className={classes.btn}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.btn}
+          onClick={onclick}
+        >
           Registrar
         </Button>
       </Grid>
     </Paper>
   );
 }
+
+export default WithBackdrop(RegisterSamples);

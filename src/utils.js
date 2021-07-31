@@ -34,3 +34,12 @@ export async function transfer_files() {
     console.error(error);
   }
 }
+
+export async function register_sample(sample) {
+  try {
+    const response = await instance.post("/amostras", sample);
+    return response;
+  } catch(error) {
+    console.error(error);
+  }
+}
