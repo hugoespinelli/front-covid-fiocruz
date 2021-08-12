@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import "react-pro-sidebar/dist/css/styles.css";
 
 import Navbar from "./navbar";
+import { ROUTES } from "../consts";
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
@@ -44,19 +45,19 @@ export default function Sidebar() {
           <SubMenu title="Amostras" icon={<FontAwesomeIcon icon={faVial} />}>
             
             <MenuItem>
-              <Link to="/lncc" />
+              <Link to={ROUTES.linkSamples} />
               <Typography variant="caption">Arquivos LNCC</Typography>
             </MenuItem>
 
             <MenuItem>
-              <Link to="/servidor" />
+              <Link to={ROUTES.searchSamples} />
               <Typography variant="caption">Arquivos Servidor Fiocruz</Typography>
             </MenuItem>
 
-            <MenuItem>
-              <Link to="/cadastrar" />
+            {/* <MenuItem>
+              <Link to={ROUTES.registerSamples} />
               <Typography variant="caption">Cadastrar Amostra</Typography>
-            </MenuItem>
+            </MenuItem> */}
             
           </SubMenu>
         </Menu>

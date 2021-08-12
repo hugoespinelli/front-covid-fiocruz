@@ -13,6 +13,11 @@ export async function get_samples(search) {
   return response.data;
 }
 
+export async function get_files(search) {
+  const response = await instance.get("/arquivos");
+  return response.data;
+}
+
 export async function download_sample() {
   const response = await instance.get("/download");
   return response;

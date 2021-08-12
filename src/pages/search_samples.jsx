@@ -57,6 +57,7 @@ export default function SearchSamples() {
       }}
       columns={[
         { title: "ID da amostra", field: "numero" },
+        { title: "ID da arquivo", field: "nomeArquivo" },
         { title: "Gravidade", field: "gravidade" },
         { title: "Doenca", field: "doenca" },
         { title: "Tecido", field: "tecido" },
@@ -85,16 +86,22 @@ export default function SearchSamples() {
             alert(`Baixar amostra ${rowData.numero}`),
         },
         (rowData) => ({
-          icon: "compare_arrows",
+          icon: "edit",
           iconProps: { color: "primary" },
-          tooltip: "Transferir para o servidor",
+          tooltip: "Editar amostra",
+          onClick: (event, rowData) => submit(rowData),
+        }),
+        (rowData) => ({
+          icon: "delete",
+          iconProps: { color: "secondary" },
+          tooltip: "Excluir amostra",
           onClick: (event, rowData) => submit(rowData),
         }),
       ]}
       options={{
         actionsColumnIndex: -1,
       }}
-      title="Dados processados no LNCC"
+      title="Catalogo de Amostras"
     />
   );
 }

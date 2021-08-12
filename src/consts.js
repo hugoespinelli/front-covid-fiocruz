@@ -1,7 +1,8 @@
 
 const ROUTES = {
   home: "/",
-  searchSamples: "/lncc",
+  searchSamples: "/ver_amostras",
+  linkSamples: "/linkar_amostras",
   registerSamples: "/cadastrar",
 }
 

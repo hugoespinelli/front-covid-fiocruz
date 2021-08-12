@@ -8,6 +8,9 @@ import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { useSnackbar } from "notistack";
+import {
+  useLocation
+} from "react-router-dom";
 
 import InputSamples from "../components/input_samples";
 import WithBackdrop from "../components/backdrop_hoc";
@@ -29,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const RegisterSamples = (props) => {
   const setBackdropOpen = props.setBackdropOpen;
   const classes = useStyles();
@@ -37,6 +44,7 @@ const RegisterSamples = (props) => {
     disease: "",
     tissue: "",
     sampleId: "",
+    fileId: useQuery().get("arquivo_id"),
     isInfected: false,
   });
   const { enqueueSnackbar } = useSnackbar();
@@ -71,6 +79,7 @@ const RegisterSamples = (props) => {
       severity: "gravidade",
       disease: "doença",
       tissue: "tecido",
+      fileId: "id arquivo",
     };
     return translation[data];
   };
@@ -129,6 +138,15 @@ const RegisterSamples = (props) => {
           label="Está infectado?"
           className={classes.switch}
         />
+        <TextField
+          id="fileId"
+          name="fileId"
+          label="Identificador arquivo"
+          value={state.fileId}
+          className={classes.textField}
+          disabled={true}
+        />
+
         <TextField
           id="sampleId"
           name="sampleId"
