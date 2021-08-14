@@ -46,12 +46,12 @@ export default function Sidebar() {
             
             <MenuItem>
               <Link to={ROUTES.linkSamples} />
-              <Typography variant="caption">Arquivos LNCC</Typography>
+              <Typography variant="caption">Arquivos para link</Typography>
             </MenuItem>
 
             <MenuItem>
               <Link to={ROUTES.searchSamples} />
-              <Typography variant="caption">Arquivos Servidor Fiocruz</Typography>
+              <Typography variant="caption">Catálogo de amostras</Typography>
             </MenuItem>
 
             {/* <MenuItem>

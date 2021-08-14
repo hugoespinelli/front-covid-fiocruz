@@ -1,18 +1,11 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-import { confirmAlert } from "react-confirm-alert";
 import { useHistory } from 'react-router-dom';
-import { useSnackbar } from "notistack";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { get_files } from "../utils";
 
-const useStyles = makeStyles((theme) => ({}));
-
 export default function LinkSamples() {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
 
   return (
@@ -29,8 +22,8 @@ export default function LinkSamples() {
         },
       }}
       columns={[
-        { title: "ID arquivo", field: "nomeArquivo" },
-        { title: "Criado em", field: "criado" },
+        { title: "ID arquivo", field: "nome" },
+        { title: "Criado em", field: "data_criacao" },
       ]}
       data={(query) =>
         new Promise(async (resolve, reject) => {
@@ -48,7 +41,7 @@ export default function LinkSamples() {
           iconProps: { color: "primary" },
           tooltip: "Linkar amostra",
           onClick: (event, rowData) =>
-          history.push(`/cadastrar?arquivo_id=${rowData.nomeArquivo}`),
+          history.push(`/cadastrar?arquivo_id=${rowData.id_arquivo}&nome=${rowData.nome}`),
         },
       ]}
       options={{
