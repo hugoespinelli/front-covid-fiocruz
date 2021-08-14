@@ -1,39 +1,22 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { confirmAlert } from "react-confirm-alert";
-import { useSnackbar } from "notistack";
+import { useHistory } from 'react-router';
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-import { get_samples, transfer_files } from "../utils";
-
-const useStyles = makeStyles((theme) => ({}));
+import { get_samples, delete_sample, download_sample } from "../utils";
 
 export default function SearchSamples() {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const transferFiles = async () => {
-    try {
-      await transfer_files();
-      enqueueSnackbar("Transferência efetuada com sucesso!", {
-        variant: "success",
-      });
-    } catch (error) {
-      enqueueSnackbar("Oops! Deu algo errado durante a transferência.", {
-        variant: "error",
-      });
-    }
-  };
+  const history = useHistory();
 
   const submit = (rowData) => {
     confirmAlert({
-      title: "Confirmação de transfêrencia de arquivos",
-      message: `Você tem certeza que deseja transferir o arquivo ${rowData.numero} do SDummont para a fiocruz?`,
+      title: "Confirmação de exclusão de arquivo",
+      message: `Você tem certeza que deseja excluir o arquivo ${rowData.numero}?`,
       buttons: [
         {
           label: "Sim",
-          onClick: () => transferFiles(),
+          onClick: () => delete_sample(rowData.id) && history.go(0),
         },
         {
           label: "Não",
@@ -57,6 +40,7 @@ export default function SearchSamples() {
       }}
       columns={[
         { title: "ID da amostra", field: "numero" },
+        { title: "Arquivo linkado", field: "nomeArquivo" },
         { title: "Gravidade", field: "gravidade" },
         { title: "Doenca", field: "doenca" },
         { title: "Tecido", field: "tecido" },
@@ -82,19 +66,25 @@ export default function SearchSamples() {
           iconProps: { color: "primary" },
           tooltip: "Baixar amostra",
           onClick: (event, rowData) =>
-            alert(`Baixar amostra ${rowData.numero}`),
+            download_sample(rowData.id_arquivo),
         },
         (rowData) => ({
-          icon: "compare_arrows",
+          icon: "edit",
           iconProps: { color: "primary" },
-          tooltip: "Transferir para o servidor",
+          tooltip: "Editar amostra",
+          onClick: (event, rowData) => console.log("wee"),
+        }),
+        (rowData) => ({
+          icon: "delete",
+          iconProps: { color: "secondary" },
+          tooltip: "Excluir amostra",
           onClick: (event, rowData) => submit(rowData),
         }),
       ]}
       options={{
         actionsColumnIndex: -1,
       }}
-      title="Dados processados no LNCC"
+      title="Catálogo de Amostras"
     />
   );
 }

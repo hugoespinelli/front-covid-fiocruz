@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 import Sidebar from "./components/sidebar";
 import SearchSamples from "./pages/search_samples";
 import RegisterSamples from "./pages/register_samples";
+import LinkSamples from "./pages/link_samples";
 import Home from "./pages/home";
 import { ROUTES } from "./consts";
 
@@ -25,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function App() {
   const classes = useStyles();
   return (
@@ -39,11 +39,14 @@ function App() {
             <Grid item sm={10} className={classes.content}>
               <Container className={classes.containerSpace}>
                 <Switch>
-                <Route exact path={ROUTES.home}>
+                  <Route exact path={ROUTES.home}>
                     <Home />
                   </Route>
                   <Route exact path={ROUTES.searchSamples}>
                     <SearchSamples />
+                  </Route>
+                  <Route exact path={ROUTES.linkSamples}>
+                    <LinkSamples />
                   </Route>
                   <Route exact path={ROUTES.registerSamples}>
                     <RegisterSamples />

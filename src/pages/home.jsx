@@ -15,11 +15,11 @@ export default function Home() {
 
   return (
     <Paper className={classes.paper}>
-      <Grid container justifyContent="left">
+      <Grid container>
         <Typography variant="h4" gutterBottom="true">
           Bem vindo ao projeto lncc/fiocruz!
         </Typography>
-        <Grid container justifyContent="left">
+        <Grid container>
           <Typography variant="caption" align="left" gutterBottom="true">
             <strong>Coordenador:</strong> Fabricio Alves <br />
             <strong>Pesquisadora:</strong> Vanessa Santos <br />
