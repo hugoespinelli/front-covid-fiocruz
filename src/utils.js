@@ -61,3 +61,8 @@ export async function register_sample(sample) {
   const response = await instance.post("/amostra", sample);
   return response;
 }
+
+export async function update_sample(sample, id) {
+  const response = await instance.put(`/amostra/${id}`, sample);
+  return response;
+}

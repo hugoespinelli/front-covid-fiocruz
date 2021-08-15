@@ -47,7 +47,7 @@ export default function SearchSamples() {
         {
           title: "Está Infectado",
           field: "estaInfectado",
-          render: (rowData) => (rowData ? "sim" : "não"),
+          render: (rowData) => (rowData.estaInfectado ? "sim" : "não"),
         },
       ]}
       data={(query) =>

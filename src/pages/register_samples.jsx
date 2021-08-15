@@ -16,6 +16,7 @@ import InputSamples from "../components/input_samples";
 import WithBackdrop from "../components/backdrop_hoc";
 import { 
   register_sample, 
+  update_sample, 
   get_diseases, 
   get_comorbidities, 
   get_tissues, 
@@ -77,12 +78,13 @@ const RegisterSamples = (props) => {
         if (isEdit) {
           const sample = await get_sample(state.sampleId);
           sampleEdit = {
-            severity: sample.gravidade,
-            disease: sample.doenca,
-            tissue: sample.tecido,
+            severity: sample.id_gravidade,
+            disease: sample.id_doenca,
+            tissue: sample.id_tecido,
             identifier: sample.numero,
             isInfected: !!sample.estaInfectado,
             fileName: sample.nomeArquivo,
+            fileId: sample.id_arquivo,
           };
         }
         setState({
@@ -118,7 +120,7 @@ const RegisterSamples = (props) => {
 
   const mapperData = (data) => {
     return {
-      id_arquivo: data.fileId,
+      arquivo: data.fileId,
       gravidade: data.severity,
       doenca: data.disease,
       tecido: data.tissue,
@@ -164,7 +166,11 @@ const RegisterSamples = (props) => {
       setBackdropOpen(true);
       const dataMapped = mapperData(state);
       try {
-        await register_sample(dataMapped);
+        if (isEdit) {
+          await update_sample(dataMapped, state.sampleId);
+        } else {
+          await register_sample(dataMapped);
+        }
         enqueueSnackbar("A amostra foi salva com sucesso!", {
           variant: "success",
         });
