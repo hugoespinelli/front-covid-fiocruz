@@ -72,7 +72,8 @@ export default function SearchSamples() {
           icon: "edit",
           iconProps: { color: "primary" },
           tooltip: "Editar amostra",
-          onClick: (event, rowData) => console.log("wee"),
+          onClick: (event, rowData) => 
+            history.push(`/cadastrar?id_amostra=${rowData.id}`),
         }),
         (rowData) => ({
           icon: "delete",

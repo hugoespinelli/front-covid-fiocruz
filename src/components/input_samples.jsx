@@ -32,7 +32,7 @@ export default function InputSamples(props) {
       >
         <option aria-label="None" value="" />
         {props.options.map(({ key, value }) => (
-          <option value={value}>{key}</option>
+          <option value={value} key={value}>{key}</option>
         ))}
       </NativeSelect>
       <FormHelperText>{props.help}</FormHelperText>

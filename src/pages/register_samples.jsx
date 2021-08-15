@@ -19,7 +19,8 @@ import {
   get_diseases, 
   get_comorbidities, 
   get_tissues, 
-  get_severities, 
+  get_severities,
+  get_sample, 
 } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,9 @@ function useQuery() {
 const RegisterSamples = (props) => {
   const setBackdropOpen = props.setBackdropOpen;
   const classes = useStyles();
+  const queryStringParams = useQuery();
+  const sampleId = queryStringParams.get("id_amostra");
+  const isEdit = sampleId !== null;
   const [state, setState] = React.useState({
     severity: "",
     severityOptions: [],
@@ -54,9 +58,10 @@ const RegisterSamples = (props) => {
     tissueOptions: [],
     comorbidity: "",
     comorbidityOptions: [],
-    sampleId: "",
-    fileName: useQuery().get("nome"),
-    fileId: useQuery().get("arquivo_id"),
+    identifier: "",
+    sampleId: sampleId ? sampleId : "",
+    fileName: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
+    fileId: queryStringParams.get("arquivo_id") ? queryStringParams.get("arquivo_id") : "",
     isInfected: true,
   });
   const { enqueueSnackbar } = useSnackbar();
@@ -68,13 +73,27 @@ const RegisterSamples = (props) => {
         const comorbidites = await get_comorbidities();
         const tissues = await get_tissues();
         const severities = await get_severities();
+        let sampleEdit = {};
+        if (isEdit) {
+          const sample = await get_sample(state.sampleId);
+          sampleEdit = {
+            severity: sample.gravidade,
+            disease: sample.doenca,
+            tissue: sample.tecido,
+            identifier: sample.numero,
+            isInfected: !!sample.estaInfectado,
+            fileName: sample.nomeArquivo,
+          };
+        }
         setState({
-          ...state, 
+          ...state,
           diseaseOptions: mapKeyValueOptions(diseases, "id_doenca"),
           comorbidityOptions: mapKeyValueOptions(comorbidites, "id_comorbidade"),
           tissueOptions: mapKeyValueOptions(tissues, "id_tecido"),
           severityOptions: mapKeyValueOptions(severities, "id_gravidade"),
+          ...sampleEdit,
         });
+        
     }
     getOptions();
     // eslint-disable-next-line
@@ -103,14 +122,14 @@ const RegisterSamples = (props) => {
       gravidade: data.severity,
       doenca: data.disease,
       tecido: data.tissue,
-      numero: data.sampleId,
+      numero: data.identifier,
       estaInfectado: data.isInfected,
     };
   };
 
   const translateData = (data) => {
     const translation = {
-      sampleId: "id da amostra",
+      identifier: "id da amostra",
       severity: "gravidade",
       disease: "doença",
       tissue: "tecido",
@@ -123,8 +142,12 @@ const RegisterSamples = (props) => {
     return data === "";
   };
 
+  const getActionPageInfo = () => {
+    return isEdit ? "Atualizar" : "Registrar";
+  }
+
   const isDataValid = (data) => {
-    const fieldsToBeChecked = ["sampleId", "severity", "disease", "tissue", "comorbidty"];
+    const fieldsToBeChecked = ["identifier", "severity", "disease", "tissue", "comorbidty"];
     return fieldsToBeChecked.every((field) => {
       if (isEmpty(state[field])) {
         enqueueSnackbar(`O campo ${translateData(field)} se encontra vazio.`, {
@@ -157,8 +180,8 @@ const RegisterSamples = (props) => {
 
   return (
     <Paper className={classes.paper}>
-      <Typography variant="h6" gutterBottom="true" align="left">
-        Registrar nova amostra
+      <Typography variant="h6" gutterBottom={true} align="left">
+        {getActionPageInfo()} nova amostra
       </Typography>
       <Grid container direction="column" alignItems="flex-start">
         <FormControlLabel
@@ -183,10 +206,10 @@ const RegisterSamples = (props) => {
         />
 
         <TextField
-          id="sampleId"
-          name="sampleId"
+          id="identifier"
+          name="identifier"
           label="Identificador amostra"
-          value={state.sampleId}
+          value={state.identifier}
           onChange={handleChange}
           className={classes.textField}
         />
@@ -229,7 +252,7 @@ const RegisterSamples = (props) => {
           className={classes.btn}
           onClick={onclick}
         >
-          Registrar
+          {getActionPageInfo()}
         </Button>
       </Grid>
     </Paper>
