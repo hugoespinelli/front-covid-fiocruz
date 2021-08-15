@@ -41,7 +41,7 @@ export default function LinkSamples() {
           iconProps: { color: "primary" },
           tooltip: "Linkar amostra",
           onClick: (event, rowData) =>
-          history.push(`/cadastrar?arquivo_id=${rowData.id_arquivo}&nome=${rowData.nome}`),
+          history.push(`/cadastrar?id_arquivo=${rowData.id_arquivo}&nome=${rowData.nome}`),
         },
       ]}
       options={{

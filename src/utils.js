@@ -1,8 +1,7 @@
 import axios from "axios";
 import FileDownload from "js-file-download";
 
-// const COVID_PATH_API = "http://157.86.153.23/inova-covd19-web";
-const COVID_PATH_API = "http://localhost:8081";
+const COVID_PATH_API = "http://localhost:8080";
 
 const instance = axios.create({
   baseURL: `${COVID_PATH_API}`,
