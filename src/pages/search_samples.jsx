@@ -47,7 +47,7 @@ export default function SearchSamples() {
         {
           title: "Está Infectado",
           field: "estaInfectado",
-          render: (rowData) => (rowData ? "sim" : "não"),
+          render: (rowData) => (rowData.estaInfectado ? "sim" : "não"),
         },
       ]}
       data={(query) =>
@@ -72,7 +72,8 @@ export default function SearchSamples() {
           icon: "edit",
           iconProps: { color: "primary" },
           tooltip: "Editar amostra",
-          onClick: (event, rowData) => console.log("wee"),
+          onClick: (event, rowData) => 
+            history.push(`/cadastrar?id_amostra=${rowData.id}`),
         }),
         (rowData) => ({
           icon: "delete",

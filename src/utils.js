@@ -1,8 +1,8 @@
 import axios from "axios";
 import FileDownload from "js-file-download";
 
-const COVID_PATH_API = "http://157.86.153.23/inova-covd19-web";
-// const COVID_PATH_API = "http://localhost:8081";
+// const COVID_PATH_API = "http://157.86.153.23/inova-covd19-web";
+const COVID_PATH_API = "http://localhost:8081";
 
 const instance = axios.create({
   baseURL: `${COVID_PATH_API}`,
@@ -47,9 +47,9 @@ export async function download_sample(id) {
   return response;
 }
 
-export async function transfer_files() {
-  const response = await instance.post("/amostras");
-  return response;
+export async function get_sample(sampleId) {
+  const response = await instance.get(`/amostra/${sampleId}`);
+  return response.data;
 }
 
 export async function delete_sample(sampleId) {
@@ -59,5 +59,10 @@ export async function delete_sample(sampleId) {
 
 export async function register_sample(sample) {
   const response = await instance.post("/amostra", sample);
+  return response;
+}
+
+export async function update_sample(sample, id) {
+  const response = await instance.put(`/amostra/${id}`, sample);
   return response;
 }
