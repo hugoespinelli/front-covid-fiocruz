@@ -31,7 +31,7 @@ function App() {
   return (
     <div className="App">
       <SnackbarProvider maxSnack={3}>
-        <Router>
+        <Router basename={ROUTES.base}>
           <Grid container className={classes.root}>
             <Grid item sm={2} className={classes.sidebar}>
               <Sidebar />
