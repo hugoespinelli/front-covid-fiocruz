@@ -62,7 +62,7 @@ const RegisterSamples = (props) => {
     identifier: "",
     sampleId: sampleId ? sampleId : "",
     fileName: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
-    fileId: queryStringParams.get("arquivo_id") ? queryStringParams.get("arquivo_id") : "",
+    fileId: queryStringParams.get("id_arquivo") ? queryStringParams.get("arquivo_id") : "",
     isInfected: true,
   });
   const { enqueueSnackbar } = useSnackbar();
@@ -149,7 +149,7 @@ const RegisterSamples = (props) => {
   }
 
   const isDataValid = (data) => {
-    const fieldsToBeChecked = ["identifier", "severity", "disease", "tissue", "comorbidty"];
+    const fieldsToBeChecked = ["identifier", "severity", "disease", "tissue", "comorbidity"];
     return fieldsToBeChecked.every((field) => {
       if (isEmpty(state[field])) {
         enqueueSnackbar(`O campo ${translateData(field)} se encontra vazio.`, {
