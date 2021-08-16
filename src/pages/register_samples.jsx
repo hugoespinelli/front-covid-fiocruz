@@ -62,7 +62,7 @@ const RegisterSamples = (props) => {
     identifier: "",
     sampleId: sampleId ? sampleId : "",
     fileName: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
-    fileId: queryStringParams.get("id_arquivo") ? queryStringParams.get("arquivo_id") : "",
+    fileId: queryStringParams.get("id_arquivo") ? queryStringParams.get("id_arquivo") : "",
     isInfected: true,
   });
   const { enqueueSnackbar } = useSnackbar();
