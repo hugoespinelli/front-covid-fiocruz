@@ -46,6 +46,7 @@ export default function LinkSamples() {
       ]}
       options={{
         actionsColumnIndex: -1,
+        paging: false,
       }}
       title="Arquivos transferidos no servidor"
     />

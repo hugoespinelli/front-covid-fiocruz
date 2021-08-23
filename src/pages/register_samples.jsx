@@ -81,6 +81,7 @@ const RegisterSamples = (props) => {
             severity: sample.id_gravidade,
             disease: sample.id_doenca,
             tissue: sample.id_tecido,
+            comorbidity: sample.id_comorbidade,
             identifier: sample.numero,
             isInfected: !!sample.estaInfectado,
             fileName: sample.nomeArquivo,
@@ -125,6 +126,7 @@ const RegisterSamples = (props) => {
       doenca: data.disease,
       tecido: data.tissue,
       numero: data.identifier,
+      comorbidade: data.comorbidity,
       estaInfectado: data.isInfected,
     };
   };

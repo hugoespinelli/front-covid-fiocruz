@@ -1,10 +1,39 @@
 import React from "react";
 import MaterialTable from "material-table";
+import { TablePagination } from '@material-ui/core';
 import { confirmAlert } from "react-confirm-alert";
 import { useHistory } from 'react-router';
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { get_samples, delete_sample, download_sample } from "../utils";
+
+function PatchedPagination(props) {
+  const {
+    ActionsComponent,
+    onChangePage,
+    onChangeRowsPerPage,
+    ...tablePaginationProps
+  } = props;
+
+  return (
+    <TablePagination
+      {...tablePaginationProps}
+      // @ts-expect-error onChangePage was renamed to onPageChange
+      onPageChange={onChangePage}
+      onRowsPerPageChange={onChangeRowsPerPage}
+      ActionsComponent={(subprops) => {
+        const { onPageChange, ...actionsComponentProps } = subprops;
+        return (
+          // @ts-expect-error ActionsComponent is provided by material-table
+          <ActionsComponent
+            {...actionsComponentProps}
+            onChangePage={onPageChange}
+          />
+        );
+      }}
+    />
+  );
+}
 
 export default function SearchSamples() {
   const history = useHistory();
@@ -27,6 +56,10 @@ export default function SearchSamples() {
 
   return (
     <MaterialTable
+      components={{
+        Pagination: PatchedPagination,
+      }}
+      onChangePage={(page) => ({page: page + 1})}
       localization={{
         toolbar: {
           searchPlaceholder: "Procurar amostra",
@@ -44,6 +77,7 @@ export default function SearchSamples() {
         { title: "Gravidade", field: "gravidade" },
         { title: "Doenca", field: "doenca" },
         { title: "Tecido", field: "tecido" },
+        { title: "Comorbidade", field: "comorbidade" },
         {
           title: "Está Infectado",
           field: "estaInfectado",
@@ -56,6 +90,7 @@ export default function SearchSamples() {
           resolve({
             data: samples, // your samples array
             page: 0, // current page number
+            pageSize: samples.length,
             totalCount: samples.length, // total row number
           });
         })
@@ -84,6 +119,7 @@ export default function SearchSamples() {
       ]}
       options={{
         actionsColumnIndex: -1,
+        paging: false,
       }}
       title="Catálogo de Amostras"
     />
