@@ -12,15 +12,10 @@ import {
   useLocation
 } from "react-router-dom";
 
-import InputSamples from "../components/input_samples";
 import WithBackdrop from "../components/backdrop_hoc";
 import { 
   register_sample, 
-  update_sample, 
-  get_diseases, 
-  get_comorbidities, 
-  get_tissues, 
-  get_severities,
+  update_sample,
   get_sample, 
 } from "../utils";
 
@@ -51,17 +46,12 @@ const RegisterSamples = (props) => {
   const sampleId = queryStringParams.get("id_amostra");
   const isEdit = sampleId !== null;
   const [state, setState] = React.useState({
-    severity: "",
-    severityOptions: [],
-    disease: "",
-    diseaseOptions: [],
-    tissue: "",
-    tissueOptions: [],
-    comorbidity: "",
-    comorbidityOptions: [],
-    identifier: "",
+    id_geo: "",
+    version_crc: "",
+    param_crc: "",
+    filter_crc: "",
     sampleId: sampleId ? sampleId : "",
-    fileName: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
+    id_biosample: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
     fileId: queryStringParams.get("id_arquivo") ? queryStringParams.get("id_arquivo") : "",
     isInfected: true,
   });
@@ -70,30 +60,21 @@ const RegisterSamples = (props) => {
   React.useEffect(() => setBackdropOpen(false), [setBackdropOpen]);
   React.useEffect(() => {
     async function getOptions() {
-        const diseases = await get_diseases();
-        const comorbidites = await get_comorbidities();
-        const tissues = await get_tissues();
-        const severities = await get_severities();
         let sampleEdit = {};
         if (isEdit) {
           const sample = await get_sample(state.sampleId);
           sampleEdit = {
-            severity: sample.id_gravidade,
-            disease: sample.id_doenca,
-            tissue: sample.id_tecido,
-            comorbidity: sample.id_comorbidade,
-            identifier: sample.numero,
-            isInfected: !!sample.estaInfectado,
-            fileName: sample.nomeArquivo,
+            id_geo: sample.id_geo,
+            version_crc: sample.versao_crc,
+            param_crc: sample.param_crc,
+            filter_crc: sample.filtro_crc,
+            isInfected: !!sample.celulas_infectadas,
+            id_biosample: sample.id_biosample,
             fileId: sample.id_arquivo,
           };
         }
         setState({
           ...state,
-          diseaseOptions: mapKeyValueOptions(diseases, "id_doenca"),
-          comorbidityOptions: mapKeyValueOptions(comorbidites, "id_comorbidade"),
-          tissueOptions: mapKeyValueOptions(tissues, "id_tecido"),
-          severityOptions: mapKeyValueOptions(severities, "id_gravidade"),
           ...sampleEdit,
         });
         
@@ -101,11 +82,6 @@ const RegisterSamples = (props) => {
     getOptions();
     // eslint-disable-next-line
  }, [])
-
-
- const mapKeyValueOptions = (options, value, key = "nome") => {
-   return options.map(option => ({key: option[key], value: option[value]}))
- }
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -121,23 +97,20 @@ const RegisterSamples = (props) => {
 
   const mapperData = (data) => {
     return {
-      arquivo: data.fileId,
-      gravidade: data.severity,
-      doenca: data.disease,
-      tecido: data.tissue,
-      numero: data.identifier,
-      comorbidade: data.comorbidity,
-      estaInfectado: data.isInfected,
+      id_arquivo: data.fileId,
+      id_geo: data.id_geo,
+      id_biosample: data.id_biosample,
+      versao_crc: data.version_crc,
+      param_crc: data.param_crc,
+      filtro_crc: data.filter_crc,
+      celulas_infectadas: data.isInfected,
     };
   };
 
   const translateData = (data) => {
     const translation = {
-      identifier: "id da amostra",
-      severity: "gravidade",
-      disease: "doença",
-      tissue: "tecido",
-      comorbidity: "comorbidade",
+      id_geo: "Identificador banco geo",
+      version_crc: "Versão do CRC",
     };
     return translation[data];
   };
@@ -151,7 +124,7 @@ const RegisterSamples = (props) => {
   }
 
   const isDataValid = (data) => {
-    const fieldsToBeChecked = ["identifier", "severity", "disease", "tissue", "comorbidity"];
+    const fieldsToBeChecked = ["id_geo", "version_crc"];
     return fieldsToBeChecked.every((field) => {
       if (isEmpty(state[field])) {
         enqueueSnackbar(`O campo ${translateData(field)} se encontra vazio.`, {
@@ -201,59 +174,54 @@ const RegisterSamples = (props) => {
               color="primary"
             />
           }
-          label="Está infectado?"
+          label="As celulas estão infectadas?"
           className={classes.switch}
         />
         <TextField
           id="fileName"
           name="fileName"
-          label="Identificador arquivo"
-          value={state.fileName}
+          label="BioSample"
+          value={state.id_biosample}
           className={classes.textField}
           disabled={true}
         />
 
         <TextField
           id="identifier"
-          name="identifier"
-          label="Identificador amostra"
-          value={state.identifier}
+          name="id_geo"
+          label="Id Geo"
+          value={state.id_geo}
           onChange={handleChange}
           className={classes.textField}
         />
 
-        <InputSamples
-          label="Gravidade"
-          name="severity"
-          value={state.severity}
+        <TextField
+          id="identifier"
+          name="version_crc"
+          label="Versão Cellranger count"
+          value={state.version_crc}
           onChange={handleChange}
-          options={state.severityOptions}
-          help="A gravidade do paciente"
+          className={classes.textField}
         />
-        <InputSamples
-          label="Doença"
-          value={state.disease}
-          name="disease"
+
+        <TextField
+          id="identifier"
+          name="param_crc"
+          label="Paramêtros do Cellranger Count"
+          value={state.param_crc}
           onChange={handleChange}
-          options={state.diseaseOptions}
-          help="Doença do paciente"
+          className={classes.textField}
         />
-        <InputSamples
-          label="Comorbidade"
-          value={state.comorbidity}
-          name="comorbidity"
+
+        <TextField
+          id="identifier"
+          name="filter_crc"
+          label="Filtros do Cellranger Count"
+          value={state.filter_crc}
           onChange={handleChange}
-          options={state.comorbidityOptions}
-          help="Comorbidade do paciente"
+          className={classes.textField}
         />
-        <InputSamples
-          label="Tecido"
-          name="tissue"
-          value={state.tissue}
-          onChange={handleChange}
-          options={state.tissueOptions}
-          help="Tecido da amostra"
-        />
+
         <Button
           variant="contained"
           color="primary"

@@ -41,7 +41,7 @@ export default function SearchSamples() {
   const submit = (rowData) => {
     confirmAlert({
       title: "Confirmação de exclusão de arquivo",
-      message: `Você tem certeza que deseja excluir o arquivo ${rowData.numero}?`,
+      message: `Você tem certeza que deseja excluir o arquivo ${rowData.id_biosample}?`,
       buttons: [
         {
           label: "Sim",
@@ -72,16 +72,15 @@ export default function SearchSamples() {
         },
       }}
       columns={[
-        { title: "ID da amostra", field: "numero" },
-        { title: "Arquivo linkado", field: "nomeArquivo" },
-        { title: "Gravidade", field: "gravidade" },
-        { title: "Doenca", field: "doenca" },
-        { title: "Tecido", field: "tecido" },
-        { title: "Comorbidade", field: "comorbidade" },
+        { title: "Id geo", field: "id_geo" },
+        { title: "Biosample", field: "id_biosample" },
+        { title: "Versao crc", field: "versao_crc" },
+        { title: "Param crc", field: "param_crc" },
+        { title: "Filtro crc", field: "filtro_crc" },
         {
-          title: "Está Infectado",
-          field: "estaInfectado",
-          render: (rowData) => (rowData.estaInfectado ? "sim" : "não"),
+          title: "Infectado",
+          field: "celulas_infectadas",
+          render: (rowData) => (rowData.celulas_infectadas ? "sim" : "não"),
         },
       ]}
       data={(query) =>
