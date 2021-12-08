@@ -5,7 +5,7 @@ import { confirmAlert } from "react-confirm-alert";
 import { useHistory } from 'react-router';
 import "react-confirm-alert/src/react-confirm-alert.css";
 
-import { get_samples, delete_sample, download_sample } from "../utils";
+import { get_samples, delete_sample } from "../utils";
 
 function PatchedPagination(props) {
   const {
