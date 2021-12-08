@@ -95,13 +95,14 @@ export default function SearchSamples() {
         })
       }
       actions={[
-        {
-          icon: "download",
-          iconProps: { color: "primary" },
-          tooltip: "Baixar amostra",
-          onClick: (event, rowData) =>
-            download_sample(rowData.id_arquivo),
-        },
+        // Deixar on hold essa parte de download
+        // {
+        //   icon: "download",
+        //   iconProps: { color: "primary" },
+        //   tooltip: "Baixar amostra",
+        //   onClick: (event, rowData) =>
+        //     download_sample(rowData.id_arquivo),
+        // },
         (rowData) => ({
           icon: "edit",
           iconProps: { color: "primary" },
