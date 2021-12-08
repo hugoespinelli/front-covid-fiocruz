@@ -61,6 +61,39 @@ export async function register_sample(sample) {
   return response;
 }
 
+export async function login(user, password) {
+  const response = await instance.post("/login", {user, password});
+  const { token } = response.data;
+  if (token) {
+    localStorage.setItem("token", token);
+    setTokenOnHeader();
+  }
+  return response.data;
+}
+
+function setTokenOnHeader() {
+  instance.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token');
+    config.headers.token =  token;
+    return config;
+  });
+}
+
+export async function userIsLogged() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      setTokenOnHeader();
+      await instance.get('/');
+      return true;
+    } catch (error) {
+      localStorage.removeItem('token');
+      return false;
+    }
+  };
+  return false;
+}
+
 export async function update_sample(sample, id) {
   const response = await instance.put(`/amostra/${id}`, sample);
   return response;
