@@ -1,7 +1,8 @@
 import axios from "axios";
 import FileDownload from "js-file-download";
 
-const COVID_PATH_API = "http://localhost:8080";
+const { REACT_APP_API_URL } = process.env
+const COVID_PATH_API = REACT_APP_API_URL;
 
 const instance = axios.create({
   baseURL: `${COVID_PATH_API}`,
