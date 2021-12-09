@@ -97,7 +97,7 @@ const RegisterSamples = (props) => {
 
   const mapperData = (data) => {
     return {
-      id_arquivo: data.fileId,
+      id_arquivo: parseInt(data.fileId),
       id_geo: data.id_geo,
       id_biosample: data.id_biosample,
       versao_crc: data.version_crc,
