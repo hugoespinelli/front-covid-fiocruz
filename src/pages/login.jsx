@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSnackbar } from "notistack";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,7 +11,17 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createTheme();
 
-export default function SignIn({ onLogin }) {
+export default function SignIn({ onLogin, showError }) {
+  const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => {
+    if (showError) {
+      enqueueSnackbar(`O e-mail/senha estão incorretos.`, {
+        variant: "error",
+      });
+    }
+  }, [showError]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

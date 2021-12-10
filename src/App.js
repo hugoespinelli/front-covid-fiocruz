@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [isLogged, setIsLogged] = React.useState(false);
+  const [loginError, setLoginError] = React.useState(false);
 
   React.useEffect(() => {
     async function logUser() {
@@ -48,15 +49,28 @@ function App() {
   }, []);
 
   async function tryToLog(user, password) {
-    const { isLogged } = await login(user, password);
-    setIsLogged(isLogged);
+    let shouldShowLogError = true;
+    try {
+      const { isLogged } = await login(user, password);
+      shouldShowLogError = false;
+      setIsLogged(isLogged);
+    } catch (error) {
+      if (shouldShowLogError) {
+        setLoginError(true);
+      }
+    } finally {
+      setLoginError(false);
+    }
   }
 
   function showLogin() {
     return (
       <Switch>
         <Route exact path={ROUTES.login}>
-          <Login onLogin={(user, password) => tryToLog(user, password)} />
+          <Login
+            onLogin={(user, password) => tryToLog(user, password)}
+            showError={loginError}
+          />
         </Route>
       </Switch>
     );
