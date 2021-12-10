@@ -22,7 +22,7 @@ export default function LinkSamples() {
         },
       }}
       columns={[
-        { title: "ID arquivo", field: "nome" },
+        { title: "ID arquivo", field: "identificador" },
         { title: "Criado em", field: "data_criacao" },
       ]}
       data={(query) =>
@@ -41,7 +41,7 @@ export default function LinkSamples() {
           iconProps: { color: "primary" },
           tooltip: "Linkar amostra",
           onClick: (event, rowData) =>
-          history.push(`/cadastrar?id_arquivo=${rowData.id_arquivo}&nome=${rowData.nome}`),
+          history.push(`/cadastrar?id_arquivo=${rowData.id_arquivo}&nome=${rowData.identificador}`),
         },
       ]}
       options={{
