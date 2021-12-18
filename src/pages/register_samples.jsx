@@ -53,7 +53,7 @@ const RegisterSamples = (props) => {
     sampleId: sampleId ? sampleId : "",
     id_biosample: queryStringParams.get("nome") ? queryStringParams.get("nome") : "",
     fileId: queryStringParams.get("id_arquivo") ? queryStringParams.get("id_arquivo") : "",
-    isInfected: true,
+    isInfected: false,
   });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -174,7 +174,8 @@ const RegisterSamples = (props) => {
               color="primary"
             />
           }
-          label="As celulas estão infectadas?"
+          label="Esse dataset é composto
+          exclusivamente de células infectadas?"
           className={classes.switch}
         />
         <TextField
